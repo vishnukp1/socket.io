@@ -16,7 +16,7 @@ function Home() {
 
       await socket.emit('send_message', messageData);
       setMessageList((list) => [...list, messageData]);
-      setCurrentMessage(''); // Clear message input after sending
+      setCurrentMessage(''); 
     }
   };
 

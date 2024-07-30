@@ -32,7 +32,7 @@ export const useRegister = () => {
   return { register, loading, error };
 };
 
-// Custom hook for user login
+
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
