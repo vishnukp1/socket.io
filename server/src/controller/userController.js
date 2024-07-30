@@ -45,3 +45,21 @@ export const loginUser = async (req, res) => {
     token: token,
   });
 };
+
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await userSchema.find(); 
+    res.status(200).json({
+      message: "Users fetched successfully",
+      status: "success",
+      data: users,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error fetching users",
+      status: "error",
+      error: err.message,
+    });
+  }
+};
