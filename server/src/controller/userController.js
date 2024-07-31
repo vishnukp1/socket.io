@@ -1,6 +1,7 @@
 import userSchema from "../model/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import chatModel from "../model/chatModel.js";
 
 export const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
@@ -43,23 +44,32 @@ export const loginUser = async (req, res) => {
     message: "User successfully login",
     status: "success",
     token: token,
+    ownerId: user._id,
   });
 };
 
-
 export const getAllUsers = async (req, res) => {
-  try {
-    const users = await userSchema.find(); 
-    res.status(200).json({
-      message: "Users fetched successfully",
-      status: "success",
-      data: users,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: "Error fetching users",
-      status: "error",
-      error: err.message,
-    });
-  }
+  const users = await userSchema.find();
+
+  const usersWithLastMessage = await Promise.all(
+    users.map(async (user) => {
+      const lastChat = await chatModel
+        .findOne({
+          $or: [{ sender: user._id }, { receiver: user._id }],
+        })
+        .sort({ createdAt: -1 });
+
+      return {
+        ...user._doc,
+        lastMessage: lastChat ? lastChat.text : "Say Hi",
+        lastMessageDate: lastChat ? lastChat.createdAt : null,
+      };
+    })
+  );
+
+  res.status(200).json({
+    message: "Users fetched successfully",
+    status: "success",
+    data: usersWithLastMessage,
+  });
 };

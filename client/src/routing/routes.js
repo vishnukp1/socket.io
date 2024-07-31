@@ -1,10 +1,11 @@
-import { HomePage, LoginPage, RegisterPage } from "../pages";
-import { homePath, loginPath, registerPath } from "./route.constant";
+import { ChatPage, LoginPage, RegisterPage } from "../pages";
+import UsersList from "../pages/UsersList";
+import { chatPath, loginPath, registerPath, userslistPath } from "./route.constant";
 
 const routes = [
   {
-    path: homePath,
-    component: HomePage,
+    path: chatPath,
+    component: ChatPage,
     exact: true,
   },
   {
@@ -17,6 +18,12 @@ const routes = [
     component: RegisterPage,
     exact: true,
   },
+  {
+    path: userslistPath,
+    component: UsersList,
+    exact: true,
+  },
+
 ];
 
 export default routes;

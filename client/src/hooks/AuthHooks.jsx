@@ -44,8 +44,12 @@ export const useLogin = () => {
 
     try {
       const response = await Axios.post("/login", { email, password });
+      console.log(response.data);
+      localStorage.setItem("onwerId",response.data.ownerId)
       toast.success(response.data.message);
-      navigate("/home");
+      if(response.data.message){
+      navigate("/users");
+      }
     } catch (err) {
       setError(err.response?.data?.message || err.message);
       console.error(err);
