@@ -30,26 +30,26 @@ const UsersList = () => {
                   .map((user) => (
                     <li
                       key={user._id}
-                      className="flex items-center justify-between py-2 border-b border-gray-600"
+                      className="flex items-center justify-between bg-[#363d3d] mb-2  p-4 border-y border-gray-600 shadow-md  shadow-gray-700"
                     >
                       <img
                         src={USER}
                         alt={user.username}
-                        className="w-10 h-10 rounded-full"
+                        className="w-16 h-16 rounded-full"
                       />
                       <span className="font-bold text-2xl text-[#d3d5d5]">
                         {user.username}
                       </span>
-                      <div className="flex flex-col text-white">
-                        <div className="text-xl text-[#d1d9a1] ">
+                      <div className="flex flex-col gap-5 text-white">
+                        <div className="text-xl text-[#f2f2f2] ">
                           {user.lastMessage}
                         </div>
-                        <div>{formatDate(user.lastMessageDate)}</div>
+                        <div className="text-sm ">{formatDate(user.lastMessageDate)}</div>
                       </div>
 
                       <Link
                         to={`/chat/${user._id}`}
-                        className="text-[#8abde6] font-semibold"
+                        className="text-[#8abde6] font-semibold text-lg"
                       >
                         Message
                       </Link>

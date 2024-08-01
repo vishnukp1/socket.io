@@ -35,7 +35,7 @@ export const loginUser = async (req, res) => {
 
   const token = jwt.sign(
     {
-      name: user.name,
+      userId: user._id,
     },
     "secretkey"
   );
@@ -48,28 +48,33 @@ export const loginUser = async (req, res) => {
   });
 };
 
-export const getAllUsers = async (req, res) => {
-  const users = await userSchema.find();
+  export const getAllUsers = async (req, res) => {
+    const loggedInUser = req.userId;
 
-  const usersWithLastMessage = await Promise.all(
-    users.map(async (user) => {
-      const lastChat = await chatModel
-        .findOne({
-          $or: [{ sender: user._id }, { receiver: user._id }],
-        })
-        .sort({ createdAt: -1 });
-
-      return {
-        ...user._doc,
-        lastMessage: lastChat ? lastChat.text : "Say Hi",
-        lastMessageDate: lastChat ? lastChat.createdAt : null,
-      };
-    })
-  );
-
-  res.status(200).json({
-    message: "Users fetched successfully",
-    status: "success",
-    data: usersWithLastMessage,
-  });
-};
+    const users = await userSchema.find();
+  
+    const usersWithLastMessage = await Promise.all(
+      users.map(async (user) => {
+        const lastChat = await chatModel
+          .findOne({
+            $or: [
+              { $and: [{ sender: loggedInUser }, { receiver: user._id }] },
+              { $and: [{ sender: user._id }, { receiver: loggedInUser }] },
+            ],
+          })
+          .sort({ createdAt: -1 });
+  
+        return {
+          ...user._doc,
+          lastMessage: lastChat ? lastChat.text : "Say Hi",
+          lastMessageDate: lastChat ? lastChat.createdAt : null,
+        };
+      })
+    );
+  
+    res.status(200).json({
+      message: "Users fetched successfully",
+      status: "success",
+      data: usersWithLastMessage,
+    });
+  };

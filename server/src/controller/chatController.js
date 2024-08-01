@@ -1,7 +1,6 @@
 import chat from "../model/chatModel.js";
 
 export const sendmessage = async (req, res) => {
-  console.log(req.body);
   const { sender, receiver, text, replyTo } = req.body;
 
   const newchat = new chat({ sender, receiver, text, replyTo });
@@ -13,11 +12,20 @@ export const sendmessage = async (req, res) => {
 };
 
 export const getChatHistory = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.params.userId;
+  const loggedInUser = req.userId;
 
   const chats = await chat.find({
-    $or: [{ sender: userId }, { receiver: userId }],
-  });
+    $or: [
+      { $and: [{ sender: loggedInUser }, { receiver: userId }] },
+      { $and: [{ sender: userId }, { receiver: loggedInUser }] },
+    ],
+  }).populate('replyTo')
 
-  res.json({ data: chats, status: "success" });
+console.log("chat",chats);
+  res.json({
+    message: "chat history got sucessfully",
+    data: chats,
+    status: "success",
+  });
 };

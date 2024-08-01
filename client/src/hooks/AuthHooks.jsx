@@ -46,6 +46,7 @@ export const useLogin = () => {
       const response = await Axios.post("/login", { email, password });
       console.log(response.data);
       localStorage.setItem("onwerId",response.data.ownerId)
+      localStorage.setItem("token", response.data.token);
       toast.success(response.data.message);
       if(response.data.message){
       navigate("/users");

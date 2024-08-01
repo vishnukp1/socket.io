@@ -8,6 +8,7 @@ const ChatScreen = () => {
   const ownerId = localStorage.getItem("onwerId");
   const [newMessage, setNewMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
+  const [placeholder, setPlaceholder] = useState("Type your message...");
   const { chatHistory, sendMessage, fetchChatHistory, loading, error } =
     useChat(ownerId);
 
@@ -22,12 +23,14 @@ const ChatScreen = () => {
       sendMessage({ receiver: selectedUserId, text: newMessage, replyTo });
       setNewMessage("");
       setReplyTo(null);
+      setPlaceholder("Type your message...")
     }
   };
 
   const handleReply = (message) => {
     setReplyTo(message._id);
-    setNewMessage(`@Reply to ${message.text} :  `);
+    setPlaceholder("Reply message here"); 
+    setNewMessage("");
   };
 
   if (!selectedUserId) {
@@ -48,8 +51,9 @@ const ChatScreen = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex-1 overflow-auto p-4">
+    <div className="flex flex-col h-screen bg-slate-800">
+      <div className="flex-1 overflow-auto p-4 bg-gray-850">
+        
         <div className="chat-history">
           {chatHistory.length === 0 ? (
             <div>No messages yet.</div>
@@ -59,13 +63,18 @@ const ChatScreen = () => {
                 key={message._id}
                 className={`message ${
                   message.sender === ownerId ? "sender" : "receiver"
-                }`}
+                } shadow-md shadow-gray-400`}
               >
                 <div className="text-xl">
                   {message.text}
-                  {message.replyTo && <div className="reply"></div>}
+                  {message.replyTo && (
+              <div>
+                <strong>Reply to:</strong> {message.replyTo.text}
+              </div>
+            )}
+
                 </div>
-                <div className="text-sm">{formatDate(message.createdAt)}</div>
+                <div className="text-[13px]">{formatDate(message.createdAt)}</div>
                 <button
                   onClick={() => handleReply(message)}
                   className="reply-button"
@@ -81,15 +90,15 @@ const ChatScreen = () => {
         <textarea
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message..."
+          placeholder={placeholder}
           className="flex-grow p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
         />
-        <button
+        <butto
           onClick={handleSendMessage}
-          className="ml-4 px-4 py-2 bg-red-400 text-black rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+          className="ml-4 px-8 py-3 bg-[#5481a5] shadow-md shadow-gray-400 text-white rounded-lg hover:bg-[#456b8a] focus:outline-none focus:ring-2  "
         >
           Send
-        </button>
+        </butto>
       </div>
     </div>
   );

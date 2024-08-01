@@ -52,7 +52,8 @@ export const useChat = (userId) => {
     async ({ receiver, text, replyTo }) => {
       setLoading(true);
       try {
-        console.log("ownerid", userId);
+       
+        console.log("replay",replyTo);
         socket.emit("send_message", {
           sender: userId,
           receiver,
