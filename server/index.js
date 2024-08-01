@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
@@ -6,7 +7,10 @@ import chatRoutes from "./src/routes/chatRoutes.js"
 import { Server as SocketIOServer } from 'socket.io';
 import cors from "cors";
 import morgan from "morgan";
+
 const app = express();
+
+dotenv.config();
 
 app.use(cors());
  

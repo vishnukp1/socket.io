@@ -52,8 +52,7 @@ export const useChat = (userId) => {
     async ({ receiver, text, replyTo }) => {
       setLoading(true);
       try {
-       
-        console.log("replay",replyTo);
+        console.log("replay", replyTo);
         socket.emit("send_message", {
           sender: userId,
           receiver,
@@ -79,4 +78,33 @@ export const useChat = (userId) => {
   );
 
   return { chatHistory, users, sendMessage, fetchChatHistory, loading, error };
+};
+
+export const useUploadProfilePhoto = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const uploadProfilePhoto = async (file, userId) => {
+    setLoading(true);
+    setError(null);
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await Axios.post(`/uploadphoto/${userId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Profile photo uploaded successfully");
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      console.error("Error uploading photo:", err);
+      toast.error("Error uploading photo");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { uploadProfilePhoto, loading, error };
 };

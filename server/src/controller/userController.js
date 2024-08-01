@@ -2,6 +2,7 @@ import userSchema from "../model/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import chatModel from "../model/chatModel.js";
+import cloudinary from "../config/couldinary.js";
 
 export const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
@@ -49,7 +50,7 @@ export const loginUser = async (req, res) => {
 };
 
   export const getAllUsers = async (req, res) => {
-    const loggedInUser = req.userId;
+    const loggedUser = req.userId;
 
     const users = await userSchema.find();
   
@@ -58,8 +59,8 @@ export const loginUser = async (req, res) => {
         const lastChat = await chatModel
           .findOne({
             $or: [
-              { $and: [{ sender: loggedInUser }, { receiver: user._id }] },
-              { $and: [{ sender: user._id }, { receiver: loggedInUser }] },
+              { $and: [{ sender: loggedUser }, { receiver: user._id }] },
+              { $and: [{ sender: user._id }, { receiver: loggedUser }] },
             ],
           })
           .sort({ createdAt: -1 });
@@ -78,3 +79,27 @@ export const loginUser = async (req, res) => {
       data: usersWithLastMessage,
     });
   };
+
+
+  export const uploadProfilePhoto = async (req, res) => {
+   
+      const  userId  = req.params.userId;
+      const file = req.file;
+
+     
+      const result = await cloudinary.uploader.upload(file.path, {
+        public_id: `${userId}_profile`, 
+      });
+      console.log("file",cloudinary.uploader.upload);
+
+      const imageUrl = result.secure_url;
+  
+   
+      await userSchema.findByIdAndUpdate(userId, { image: imageUrl });
+  
+      res.status(200).json({
+        message: 'Profile photo updated successfully',
+        status: 'success',
+        data: { image: imageUrl },
+      });
+    } 

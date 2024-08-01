@@ -22,7 +22,7 @@ export const getChatHistory = async (req, res) => {
     ],
   }).populate('replyTo')
 
-console.log("chat",chats);
+
   res.json({
     message: "chat history got sucessfully",
     data: chats,

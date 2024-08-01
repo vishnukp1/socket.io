@@ -95,7 +95,7 @@ const ChatScreen = () => {
         />
         <butto
           onClick={handleSendMessage}
-          className="ml-4 px-8 py-3 bg-[#5481a5] shadow-md shadow-gray-400 text-white rounded-lg hover:bg-[#456b8a] focus:outline-none focus:ring-2  "
+          className="ml-4 px-8 py-3 bg-[#70b6ef] shadow-md shadow-gray-400 text-white rounded-lg hover:bg-[#456b8a] focus:outline-none focus:ring-2  "
         >
           Send
         </butto>
