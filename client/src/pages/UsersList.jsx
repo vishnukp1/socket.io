@@ -41,7 +41,7 @@ const UsersList = () => {
       </form>
       <div className="border p-8 rounded-md">
         <h1 className="text-center text-xl text-[#c5b9fa] sm:text-3xl font-semibold">
-          PeopleS
+          Friends
         </h1>
         <div className="w-full mt-8">
           {loading ? (
@@ -59,7 +59,7 @@ const UsersList = () => {
                       className="flex items-center justify-between bg-[#363d3d] mb-2  p-4 border-y border-gray-600 shadow-md  shadow-gray-700"
                     >
                       <img
-                        src={user.image}
+                        src={user.image?user.image: USER}
                         alt={user.username}
                         className="w-16 h-16 rounded-full"
                       />

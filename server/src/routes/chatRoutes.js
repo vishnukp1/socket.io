@@ -6,7 +6,7 @@ import { authenticateToken } from '../middleware/authUser.js';
 const router = express.Router();
 
 
-router.post('/send', tryCatch(sendmessage));
+router.post('/send',authenticateToken, tryCatch(sendmessage));
 
 router.get('/history/:userId',authenticateToken, tryCatch(getChatHistory));
 
