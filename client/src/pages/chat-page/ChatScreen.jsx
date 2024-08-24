@@ -23,13 +23,13 @@ const ChatScreen = () => {
       sendMessage({ receiver: selectedUserId, text: newMessage, replyTo });
       setNewMessage("");
       setReplyTo(null);
-      setPlaceholder("Type your message...")
+      setPlaceholder("Type your message...");
     }
   };
 
   const handleReply = (message) => {
     setReplyTo(message._id);
-    setPlaceholder("Reply message here"); 
+    setPlaceholder("Reply message here");
     setNewMessage("");
   };
 
@@ -53,7 +53,6 @@ const ChatScreen = () => {
   return (
     <div className="flex flex-col h-screen bg-slate-800">
       <div className="flex-1 overflow-auto p-4 bg-gray-850">
-        
         <div className="chat-history">
           {chatHistory.length === 0 ? (
             <div>No messages yet.</div>
@@ -68,13 +67,14 @@ const ChatScreen = () => {
                 <div className="text-xl">
                   {message.text}
                   {message.replyTo && (
-              <div>
-                <strong>Reply to:</strong> {message.replyTo.text}
-              </div>
-            )}
-
+                    <div>
+                      <strong>Reply to:</strong> {message.replyTo.text}
+                    </div>
+                  )}
                 </div>
-                <div className="text-[13px]">{formatDate(message.createdAt)}</div>
+                <div className="text-[13px]">
+                  {formatDate(message.createdAt)}
+                </div>
                 <button
                   onClick={() => handleReply(message)}
                   className="reply-button"
