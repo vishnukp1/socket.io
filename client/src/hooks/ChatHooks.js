@@ -59,12 +59,7 @@ export const useChat = (userId) => {
           text,
           replyTo,
         });
-        const response = await Axios.post("/send", {
-          sender: userId,
-          receiver,
-          text,
-          replyTo,
-        });
+     
         await fetchChatHistory(receiver);
       } catch (err) {
         setError(err.message);
